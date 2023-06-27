@@ -5,9 +5,9 @@ class LivroController {
 
   static listarLivros = async (req, res, next) => {
     try {
-      const livrosResultado = await  livros.find().populate("autor");
-
-      res.status(200).json(livrosResultado);
+      const buscaLivros = livros.find();
+      req.resultado = buscaLivros;
+      next();
     } catch (error) {
       next(error);
     }
@@ -79,10 +79,13 @@ class LivroController {
       if (busca == null)
         return res.status(200).send([]);
 
-      const livrosResultado = await livros
+      const livrosResultado = livros
         .find(busca)
         .populate("autor");
-      res.status(200).send(livrosResultado);
+
+      req.resultado = livrosResultado;
+      
+      next();
     } catch (error) {
       next(error);
     }
